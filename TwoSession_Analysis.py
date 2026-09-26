@@ -48,6 +48,10 @@ betaR_df = modelresults_df.pivot(index='participant_id', columns='round', values
 betaR_df.columns = ['betaR_1', 'betaR_2']
 betaR_df = betaR_df.dropna().reset_index()
 
+# Pivot the dataframe so that each participant has a row with betaP values from session 1 and 2
+betaP_df = modelresults_df.pivot(index='participant_id', columns='round', values='betaP')
+betaP_df.columns = ['betaP_1', 'betaP_2']
+betaP_df = betaP_df.dropna().reset_index()
 
 #%% Ratings analysis
 
@@ -200,6 +204,62 @@ range_consistency_df = RangeMood[['participant_id', 'mood_range_consistency']].m
 corr_rcons_betas, p_rcons_betas = stats.pearsonr(range_consistency_df['mood_range_consistency'], range_consistency_df['betas_diff'])
 print(f"\nPearson correlation between betaR-betaP (from the first seesion) and mood range consistency: {corr_rcons_betas}, P value: {p_rcons_betas}")
 
+# Correlation in betaP across sessions
+
+# Pearson correlation
+corr_betaP, p_betaP = stats.pearsonr(betaP_df['betaP_1'], betaP_df['betaP_2'])
+print(f"\nPearson correlation in betaP across sessions: {corr_betaP}, P value: {p_betaP}")
+
+# betaP ICC
+betaP_long = betaP_df.melt(id_vars='participant_id',
+                  value_vars=['betaP_1', 'betaP_2'],
+                  var_name='session', value_name='betaP')
+betaP_long['session'] = betaP_long['session'].str.extract(r'_(\d)').astype(int)
+
+# Compute ICC
+betaP_iccresult = pg.intraclass_corr(data=betaP_long, targets='participant_id', raters='session', ratings='betaP')
+print("\nbetaP ICC:")
+print(betaP_iccresult[['Type', 'ICC', 'CI95%', 'pval']])
+
+# Correlation between betaP and the mood range
+RangeMood = RangeMood.merge(betaP_df, on='participant_id')
+
+# Pearson correlation- Session 1
+first_corr_rangeP, first_p_rangeP = stats.pearsonr(RangeMood['range_1'], RangeMood['betaP_1'])
+print(f"\nPearson correlation between mood range session 1 and betaP: {first_corr_rangeP}, P value: {first_p_rangeP}")
+
+# Pearson correlation- Session 2
+second_corr_rangeP, second_p_rangeP = stats.pearsonr(RangeMood['range_2'], RangeMood['betaP_2'])
+print(f"\nPearson correlation between mood range session 2 and betaP: {second_corr_rangeP}, P value: {second_p_rangeP}")
+
+
+# Correlation between betP and mood consistency
+correlation_results = []
+
+for participant in first_df['participant_id'].unique():
+    
+    # Get mood ratings for each session, drop NaNs
+    first = first_df[first_df['participant_id'] == participant]['happySlider.response'].dropna().reset_index(drop=True)
+    second = second_df[second_df['participant_id'] == participant]['happySlider.response'].dropna().reset_index(drop=True)
+    
+    r_trajectories, p_trajectories = stats.pearsonr(first, second) # Compute Pearson correlation between Session 1 and Session 2 mood trajectories
+
+    correlation_results.append({
+        'participant_id': participant,
+        'r_pearson': r_trajectories,
+        'p_value': p_trajectories,
+    })
+
+consistency_df = pd.DataFrame(correlation_results)
+consistency_betaP = consistency_df.merge(betaP_df, on='participant_id')
+
+# Pearson correlation
+corr_consP, p_consP = stats.pearsonr(consistency_betaP['r_pearson'], consistency_betaP['betaP_1'])
+print(f"\nPearson correlation between mood consistency and betaP: {corr_consP}, P value: {p_consP}")
+
+# Spearman correlation
+corr_consP, p_consP = stats.spearmanr(consistency_betaP['r_pearson'], consistency_betaP['betaP_1'])
+print(f"\nSpearman correlation between mood consistency and betaP: {corr_consP}, P value: {p_consP}")
 
 
 

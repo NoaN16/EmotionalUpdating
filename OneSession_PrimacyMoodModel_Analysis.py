@@ -214,97 +214,159 @@ LowCon_ALLResults.to_csv(low_output_path, index=False)
 
 #%% Correlations
 
-# Correlation between betaR and the standart deviation of the mood ratings
+#%% Correlations
 
+# Correlation between betaR and the standart deviation of the mood ratings
 def stdmood_r_correlation(df):
     
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['betaR'], df['Ratings_ST'])
-    print(f"\nPearson correlation between betaR and the standart deviation of the mood ratings: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['betaR'], df['Ratings_ST'])
+    print(f"\nPearson correlation between betaR and the standart deviation of the mood ratings: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['betaR'], df['Ratings_ST'])
+    print(f"\nSpearman correlation between betaR and the standard deviation of the mood ratings: {Scorr}, P value: {Sp_value}")
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_stdr, high_p_stdr = stdmood_r_correlation(HighCon_ALLResults) # High Mood Target
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_stdr, high_Pp_stdr, high_Scorr_stdr, high_Sp_stdr= stdmood_r_correlation(HighCon_ALLResults) 
 
-low_corr_stdr, low_p_stdr = stdmood_r_correlation(LowCon_ALLResults) # Low Mood Target
+# Low Mood Target
+print("\nLow Mood Target")
+low_Pcorr_stdr, low_Pp_stdr, low_Scorr_stdr, low_Sp_stdr = stdmood_r_correlation(LowCon_ALLResults) 
 
 # Correlation between betaR and the range of the mood ratings
-
 def rangemood_r_correlation(df):
     
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['betaR'], df['range'])
-    print(f"\nPearson correlation between betaR and the range of the mood ratings: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['betaR'], df['range'])
+    print(f"\nPearson correlation between betaR and the range of the mood ratings: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['betaR'], df['range'])
+    print(f"\nSpearman correlation between betaR and the range of the mood ratings: {Scorr}, P value: {Sp_value}")
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_ranger, high_p_ranger = rangemood_r_correlation(HighCon_ALLResults) # High Mood Target
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_ranger, high_Pp_ranger, high_Scorr_ranger, high_Sp_ranger = rangemood_r_correlation(HighCon_ALLResults) 
 
-low_corr_ranger, low_p_ranger = rangemood_r_correlation(LowCon_ALLResults) # Low Mood Target
-
-# Correlation between betaR - betaP and the standart deviation of the mood ratings
+# Low Mood Target
+print("\nLow Mood Target")
+low_Pcorr_ranger, low_Pp_ranger, low_Scorr_ranger, low_Sp_ranger = rangemood_r_correlation(LowCon_ALLResults)
 
 def stdmood_rp_correlation(df):
     
     df['beta_diff'] = df['betaR'] - df['betaP']
     
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['beta_diff'], df['Ratings_ST'])
-    print(f"\nPearson correlation between betaR - betaP and the standart deviation of the mood ratings: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['beta_diff'], df['Ratings_ST'])
+    print(f"\nPearson correlation between betaR - betaP and the standart deviation of the mood ratings: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['beta_diff'], df['Ratings_ST'])
+    print(f"\nSpearman correlation between betaR - betaP and CESD-10 score: {Scorr}, P value: {Sp_value}")
+    
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_stdrp, high_p_stdrp = stdmood_rp_correlation(HighCon_ALLResults) # High Mood Target
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_stdrp, high_Pp_stdrp, high_Scorr_stdrp, high_Sp_stdrp = stdmood_rp_correlation(HighCon_ALLResults) 
 
 # Correlation between betaR - betaP and CESD-10 score
-
 def cesd_rp_correlation(df):
     
     df['beta_diff'] = df['betaR'] - df['betaP']
     
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['beta_diff'], df['CESD10_score'])
-    print(f"\nPearson correlation between betaR - betaP and CESD-10 score: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['beta_diff'], df['CESD10_score'])
+    print(f"\nPearson correlation between betaR - betaP and CESD-10 score: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['beta_diff'], df['CESD10_score'])
+    print(f"\nSpearman correlation between betaR - betaP and CESD-10 score: {Scorr}, P value: {Sp_value}")
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_cesdrp, high_p_cesdrp = cesd_rp_correlation(HighCon_ALLResults) # High Mood Target
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_cesdrp, high_Pp_cesdrp, high_Scorr_cesdrp, high_Sp_cesdrp = cesd_rp_correlation(HighCon_ALLResults)
 
-low_corr_cesdrp, low_p_cesdrp = cesd_rp_correlation(LowCon_ALLResults) # Low Mood Target
+# Low Mood Target
+print("\nLow Mood Target")
+low_Pcorr_cesdrp, low_Pp_cesdrp, low_Scorr_cesdrp, low_Sp_cesdrp = cesd_rp_correlation(LowCon_ALLResults) 
 
 # Correlation between betaR and CESD-10 score
-
 def cesd_r_correlation(df):
   
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['betaR'], df['CESD10_score'])
-    print(f"\nPearson correlation between betaR and CESD-10 score: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['betaR'], df['CESD10_score'])
+    print(f"\nPearson correlation between betaR and CESD-10 score: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['betaR'], df['CESD10_score'])
+    print(f"\nSpearman correlation between betaR and CESD-10 score: {Scorr}, P value: {Sp_value}")
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_cesdr, high_p_cesdr = cesd_r_correlation(HighCon_ALLResults) # High Mood Target
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_cesdr, high_Pp_cesdr, high_Scorr_cesdr, high_Sp_cesdr = cesd_r_correlation(HighCon_ALLResults) 
 
 # Correlation between betaP and CESD-10 score
-
 def cesd_p_correlation(df):
   
     # Pearson correlation
-    corr, p_value = stats.pearsonr(df['betaP'], df['CESD10_score'])
-    print(f"\nPearson correlation between betaP and CESD-10 score: {corr}, P value: {p_value}")
+    Pcorr, Pp_value = stats.pearsonr(df['betaP'], df['CESD10_score'])
+    print(f"\nPearson correlation between betaP and CESD-10 score: {Pcorr}, P value: {Pp_value}")
     
-    return corr, p_value
+    # Spearman Correlations
+    Scorr, Sp_value = stats.spearmanr(df['betaP'], df['CESD10_score'])
+    print(f"\nSpearman correlation between betaP and CESD-10 score: {Scorr}, P value: {Sp_value}")
+    
+    return Pcorr, Pp_value, Scorr, Sp_value
 
-high_corr_cesdp, high_p_cesdp = cesd_p_correlation(HighCon_ALLResults) # High Mood Target
-
+# High Mood Target
+print("\nHigh Mood Target")
+high_Pcorr_cesdp, high_Pp_cesdp, high_Scorr_cesdp, high_Sp_cesdp = cesd_p_correlation(HighCon_ALLResults) 
 
 #%% Regression Model
 
-# High Mood Target
-high_model_betaR = ols('betaR ~ Ratings_Mean + Ratings_ST + Rating_first', data = HighCon_ALLResults).fit()
-print(high_model_betaR.summary())
+# First rating
+high_model_cesdR_First = ols('CESD10_score ~ betaR + Ratings_Mean + range + Rating_first', data = HighCon_ALLResults).fit()
+print("\nHigh Mood Model: CESD10_score ~ betaR + Ratings_Mean + range + Rating_first")
+print(high_model_cesdR_First.summary())
 
-# Low Mood Target
-low_model_betaR = ols('betaR ~ Ratings_Mean + Ratings_ST + Rating_first', data = LowCon_ALLResults).fit()
-print(low_model_betaR.summary())
+high_model_cesdP_First = ols('CESD10_score ~ betaP + Ratings_Mean + range + Rating_first', data = HighCon_ALLResults).fit()
+print("\nHigh Mood Model: CESD10_score ~ betaP + Ratings_Mean + range + Rating_first")
+print(high_model_cesdP_First.summary())
 
+#Target dis
+HighCon_ALLResults['TragetDis'] = (0.85- HighCon_ALLResults['Rating_first']).abs()
+LowCon_ALLResults['TragetDis'] = (0.30- LowCon_ALLResults['Rating_first']).abs()
 
+high_model_cesdR_TargetDis = ols('CESD10_score ~ betaR + Ratings_Mean + range + TragetDis', data = HighCon_ALLResults).fit()
+print("\nHigh Mood Model: CESD10_score ~ betaR + Ratings_Mean + range + TragetDis")
+print(high_model_cesdR_TargetDis.summary())
+
+high_model_cesdP_TargetDis = ols('CESD10_score ~ betaP + Ratings_Mean + range + TragetDis', data = HighCon_ALLResults).fit()
+print("\nHigh Mood Model: CESD10_score ~ betaP + Ratings_Mean + range + TragetDis")
+print(high_model_cesdP_TargetDis.summary())
+
+# CESD X All conditions Model
+LowCon_ALLResults["Target"] = 0
+HighCon_ALLResults["Target"] = 1
+
+allCon = pd.concat([LowCon_ALLResults, HighCon_ALLResults], ignore_index=True)
+
+allCon = allCon.dropna(subset=["betaR", "CESD10_score", "Target"]).copy()
+
+allCon["CESD_centered"] = (allCon["CESD10_score"] - allCon["CESD10_score"].mean())
+allCon_model = ols("betaR ~ CESD_centered * Target", data=allCon).fit()
+
+print("\nModel: betaR ~ CESD_centered * Target")
+print(allCon_model.summary())
